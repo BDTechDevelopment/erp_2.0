@@ -1,0 +1,19 @@
+{
+  "name": "erp-backend",
+  "scripts": {
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^5",
+    "bcrypt": "^5",
+    "cors": "^2",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4",
+    "express": "^4",
+    "jsonwebtoken": "^9",
+    "pdfkit": "^0.13"
+  },
+  "devDependencies": {
+    "prisma": "^5"
+  }
+}

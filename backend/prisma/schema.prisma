@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String     @id @default(uuid())
+  name       String
+  email      String     @unique
+  password   String
+  items      Item[]
+  activities Activity[]
+  persons    Person[]
+  createdAt  DateTime   @default(now())
+}
+
+model Item {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  quantity    Int      @default(0)
+  price       Float?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model Person {
+  id         String     @id @default(uuid())
+  name       String
+  phone      String?
+  email      String?
+  notes      String?
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities Activity[]
+  createdAt  DateTime   @default(now())
+}
+
+model Activity {
+  id           String   @id @default(uuid())
+  title        String
+  description  String?
+  activityDate DateTime
+  time         String?
+  status       String   @default("pending")
+  personId     String?
+  person       Person?  @relation(fields: [personId], references: [id], onDelete: SetNull)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([activityDate])
+}
