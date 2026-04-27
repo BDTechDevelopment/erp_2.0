@@ -5,11 +5,11 @@ import api from "../../services/api";
 import PageLayout from "../../components/PageLayout";
 
 export default function Persons() {
-  const [persons, setPersons] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", notes: "" });
-  const [error, setError] = useState("");
+  const [persons, setPersons]   = useState([]);
+  const [modal, setModal]       = useState(false);
+  const [editing, setEditing]   = useState(null);
+  const [form, setForm]         = useState({ name: "", phone: "", email: "", notes: "" });
+  const [error, setError]       = useState("");
 
   async function load() {
     const res = await api.get("/persons");
@@ -57,79 +57,93 @@ export default function Persons() {
       <PageLayout
         title="Clientes"
         subtitle="Cadastro de clientes e informações de contato"
-        color="#0dcaf0"
         actions={
           <button className="btn btn-primary btn-sm fw-semibold" onClick={openCreate}>
-            + Novo Cliente
+            <i className="bi bi-plus-lg me-1"></i>Novo Cliente
           </button>
         }
       >
-        <div className="card-body p-4">
-          {persons.length === 0 ? (
-            <div className="alert alert-info mb-0">Nenhum cliente cadastrado. Clique em &quot;+ Novo Cliente&quot; para começar.</div>
-          ) : (
-            <div className="table-responsive">
-              <table className="table table-hover mb-0">
-                <thead className="table-dark">
-                  <tr>
-                    <th>Nome</th>
-                    <th>Telefone</th>
-                    <th>E-mail</th>
-                    <th>Observações</th>
-                    <th style={{ width: 160 }}>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {persons.map(person => (
-                    <tr key={person.id}>
-                      <td className="fw-semibold">{person.name}</td>
-                      <td>{person.phone || "–"}</td>
-                      <td className="text-muted">{person.email || "–"}</td>
-                      <td className="text-muted">{person.notes || "–"}</td>
-                      <td>
-                        <button className="btn btn-sm btn-warning me-1" onClick={() => openEdit(person)}>Editar</button>
-                        <button className="btn btn-sm btn-danger" onClick={() => handleDelete(person.id)}>Excluir</button>
-                      </td>
+        <div className="card border-0 shadow-sm rounded-3">
+          <div className="card-body p-0">
+            {persons.length === 0 ? (
+              <div className="text-center py-5 text-muted">
+                <i className="bi bi-people fs-1 d-block mb-2 opacity-50"></i>
+                <p className="mb-0">Nenhum cliente cadastrado.</p>
+                <small>Clique em &quot;+ Novo Cliente&quot; para começar.</small>
+              </div>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-hover align-middle mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th className="fw-semibold small text-uppercase text-muted ps-4">Nome</th>
+                      <th className="fw-semibold small text-uppercase text-muted">Telefone</th>
+                      <th className="fw-semibold small text-uppercase text-muted">E-mail</th>
+                      <th className="fw-semibold small text-uppercase text-muted">Observações</th>
+                      <th className="fw-semibold small text-uppercase text-muted pe-4" style={{ width: 140 }}>Ações</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  </thead>
+                  <tbody>
+                    {persons.map(person => (
+                      <tr key={person.id}>
+                        <td className="fw-semibold ps-4">{person.name}</td>
+                        <td className="text-muted small">{person.phone || "–"}</td>
+                        <td className="text-muted small">{person.email || "–"}</td>
+                        <td className="text-muted small">{person.notes || "–"}</td>
+                        <td className="pe-4">
+                          <button className="btn btn-sm btn-outline-primary me-1" onClick={() => openEdit(person)}>
+                            <i className="bi bi-pencil"></i>
+                          </button>
+                          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(person.id)}>
+                            <i className="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       </PageLayout>
 
       {modal && (
-        <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-          <div className="modal-dialog">
-            <div className="modal-content" style={{ borderRadius: 12 }}>
-              <div className="modal-header bg-primary text-white" style={{ borderRadius: "12px 12px 0 0" }}>
-                <h5 className="modal-title">{editing ? "Editar Cliente" : "Novo Cliente"}</h5>
-                <button className="btn-close btn-close-white" onClick={() => setModal(false)} />
+        <div className="modal d-block" style={{ backgroundColor: "rgba(0,0,0,0.4)" }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow rounded-4">
+              <div className="modal-header border-bottom">
+                <h5 className="modal-title fw-bold">
+                  <i className={`bi ${editing ? "bi-pencil" : "bi-person-plus"} text-primary me-2`}></i>
+                  {editing ? "Editar Cliente" : "Novo Cliente"}
+                </h5>
+                <button className="btn-close" onClick={() => setModal(false)} />
               </div>
               <form onSubmit={handleSave}>
-                <div className="modal-body">
-                  {error && <div className="alert alert-danger py-2">{error}</div>}
+                <div className="modal-body p-4">
+                  {error && <div className="alert alert-danger py-2 small">{error}</div>}
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Nome *</label>
+                    <label className="form-label fw-semibold small">Nome <span className="text-danger">*</span></label>
                     <input className="form-control" value={form.name} placeholder="Nome completo" onChange={e => setForm({ ...form, name: e.target.value })} />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Telefone / WhatsApp</label>
+                    <label className="form-label fw-semibold small">Telefone / WhatsApp</label>
                     <input className="form-control" value={form.phone} placeholder="(11) 99999-9999" onChange={e => setForm({ ...form, phone: e.target.value })} />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">E-mail</label>
+                    <label className="form-label fw-semibold small">E-mail</label>
                     <input type="email" className="form-control" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Observações</label>
+                    <label className="form-label fw-semibold small">Observações</label>
                     <textarea className="form-control" rows={3} value={form.notes} placeholder="Alergias, preferências, etc." onChange={e => setForm({ ...form, notes: e.target.value })} />
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setModal(false)}>Cancelar</button>
-                  <button type="submit" className="btn btn-primary">Salvar</button>
+                <div className="modal-footer border-top">
+                  <button type="button" className="btn btn-outline-secondary" onClick={() => setModal(false)}>Cancelar</button>
+                  <button type="submit" className="btn btn-primary fw-semibold">
+                    <i className="bi bi-check-lg me-1"></i>Salvar
+                  </button>
                 </div>
               </form>
             </div>
