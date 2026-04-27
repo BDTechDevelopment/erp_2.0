@@ -120,7 +120,7 @@ export default function Calendar() {
               let cellClass = "col border rounded-2 p-1 ";
               if (isSelected)   cellClass += "border-primary border-2 bg-primary bg-opacity-10";
               else if (isToday) cellClass += "border-warning border-2 bg-warning bg-opacity-10";
-              else              cellClass += "border-light bg-white";
+              else              cellClass += "border bg-white";
 
               return (
                 <div key={day} className={cellClass} style={{ cursor: "pointer", minHeight: 90 }} onClick={() => handleDayClick(day)}>
