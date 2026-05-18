@@ -10,6 +10,7 @@ const MODULES = [
   { href: "/items",    label: "Itens / Serviços", desc: "Gerencie os serviços e produtos oferecidos",    icon: "bi-box-seam-fill",    color: "secondary" },
   { href: "/report",   label: "Relatórios",       desc: "Gere relatórios de agendamentos por período",   icon: "bi-bar-chart-fill",   color: "warning"   },
   { href: "/users",    label: "Usuários",         desc: "Controle os usuários com acesso ao sistema",    icon: "bi-shield-lock-fill", color: "danger"    },
+  { href: "/pricing",   label: "Precificação",     desc: "Cadastre serviços e seus valores",              icon: "bi-tag-fill",         color: "success"   },
   { href: "/settings", label: "Configurações",    desc: "Nome, logo e cores do sistema",                 icon: "bi-gear-fill",        color: "secondary" },
 ];
 

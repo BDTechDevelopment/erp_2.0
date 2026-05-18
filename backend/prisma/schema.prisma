@@ -44,33 +44,41 @@ model Person {
 }
 
 model Activity {
-  id           String   @id @default(uuid())
+  id           String            @id @default(uuid())
   title        String
   description  String?
   activityDate DateTime
   time         String?
-  status       String   @default("pending")
+  status       String            @default("pending")
   price        Float?
   personId     String?
-  person       Person?  @relation(fields: [personId], references: [id], onDelete: SetNull)
-  pricingId    String?
-  pricing      Pricing? @relation(fields: [pricingId], references: [id], onDelete: SetNull)
+  person       Person?           @relation(fields: [personId], references: [id], onDelete: SetNull)
+  pricings     ActivityPricing[]
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime @default(now())
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime          @default(now())
 
   @@index([activityDate])
 }
 
 model Pricing {
-  id          String     @id @default(uuid())
+  id          String            @id @default(uuid())
   name        String
   description String?
   price       Float
   userId      String
-  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  activities  Activity[]
-  createdAt   DateTime   @default(now())
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activities  ActivityPricing[]
+  createdAt   DateTime          @default(now())
+}
+
+model ActivityPricing {
+  activityId String
+  pricingId  String
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  pricing    Pricing  @relation(fields: [pricingId], references: [id], onDelete: Cascade)
+
+  @@id([activityId, pricingId])
 }
 
 model SystemConfig {
