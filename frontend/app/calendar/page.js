@@ -154,6 +154,23 @@ export default function Calendar() {
         </button>
       }
     >
+      {/* Estimativa mensal */}
+      <div className="d-flex justify-content-end mb-3">
+        <div className="card border-0 shadow-sm rounded-3 px-4 py-2 d-flex flex-row align-items-center gap-3">
+          <div className="text-center">
+            <div className="text-muted fw-semibold text-uppercase" style={{ fontSize: 10, letterSpacing: 1 }}>Agendamentos</div>
+            <div className="fw-bold" style={{ fontSize: 18 }}>{activities.filter(a => a.status !== "cancelled").length}</div>
+          </div>
+          <div className="vr"></div>
+          <div className="text-center">
+            <div className="text-muted fw-semibold text-uppercase" style={{ fontSize: 10, letterSpacing: 1 }}>
+              Estimativa {date.toLocaleString("pt-BR", { month: "long" })}
+            </div>
+            <div className="fw-bold text-success" style={{ fontSize: 18 }}>{formatPrice(monthTotal)}</div>
+          </div>
+        </div>
+      </div>
+
       {/* Calendário */}
       <div className="card border-0 shadow-sm rounded-3 mb-4">
         <div className="card-body p-3">
@@ -310,6 +327,17 @@ export default function Calendar() {
               </div>
             )}
           </div>
+          {dayActivities.length > 0 && (
+            <div className="px-4 py-3 border-top d-flex justify-content-between align-items-center">
+              <span className="text-muted small">
+                {dayActivities.filter(a => a.status !== "cancelled").length} agendamento(s) ativos
+              </span>
+              <div className="text-end">
+                <div className="text-muted" style={{ fontSize: 11 }}>Total do dia</div>
+                <div className="fw-bold text-success fs-6">{formatPrice(dayTotal)}</div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
