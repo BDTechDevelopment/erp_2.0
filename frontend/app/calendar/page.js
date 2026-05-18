@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import api from "../../services/api";
 import { useRouter } from "next/navigation";
 import PageLayout from "../../components/PageLayout";
+import { useConfig } from "../../hooks/useConfig";
 
 const WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const STATUS_LABEL = { pending: "Pendente", confirmed: "Confirmado", cancelled: "Cancelado" };
@@ -12,6 +13,7 @@ const STATUS_COLOR = { pending: "warning", confirmed: "success", cancelled: "dan
 const EDIT_EMPTY = { title: "", description: "", time: "", personId: "", selectedIds: [], priceOverride: "" };
 
 export default function Calendar() {
+  const config = useConfig();
   const router = useRouter();
   const [date, setDate]               = useState(new Date());
   const [activities, setActivities]   = useState([]);
@@ -124,6 +126,14 @@ export default function Calendar() {
     .filter(p => editForm.selectedIds.includes(p.id))
     .reduce((acc, p) => acc + p.price, 0);
 
+  const monthTotal = activities
+    .filter(a => a.price != null && a.status !== "cancelled")
+    .reduce((acc, a) => acc + a.price, 0);
+
+  const dayTotal = dayActivities
+    .filter(a => a.price != null && a.status !== "cancelled")
+    .reduce((acc, a) => acc + a.price, 0);
+
   const totalDays      = new Date(year, month, 0).getDate();
   const firstDayOfWeek = new Date(year, month - 1, 1).getDay();
   const cells = [
@@ -171,13 +181,28 @@ export default function Calendar() {
               const dayActs    = activities.filter(a => new Date(a.activityDate).getUTCDate() === day);
               const isSelected = selectedDay === day;
               const isToday    = day === todayDay && month === todayMonth && year === todayYear;
-              let cellClass = "col border rounded-2 p-1 ";
-              if (isSelected)   cellClass += "border-primary border-2 bg-primary bg-opacity-10";
-              else if (isToday) cellClass += "border-warning border-2 bg-warning bg-opacity-10";
-              else              cellClass += "border bg-white";
+              const hasActs    = dayActs.length > 0;
+
+              const cellStyle = {
+                cursor: "pointer",
+                minHeight: 90,
+                borderRadius: 8,
+                border: isSelected
+                  ? `2px solid ${config.primaryColor}`
+                  : isToday
+                  ? "2px solid #f59e0b"
+                  : `1px solid ${config.primaryColor}40`,
+                background: isSelected
+                  ? `${config.primaryColor}18`
+                  : isToday
+                  ? "#fef3c720"
+                  : hasActs
+                  ? `${config.primaryColor}08`
+                  : "#fff",
+              };
 
               return (
-                <div key={day} className={cellClass} style={{ cursor: "pointer", minHeight: 90 }} onClick={() => handleDayClick(day)}>
+                <div key={day} className="col p-1" style={cellStyle} onClick={() => handleDayClick(day)}>
                   <div className="d-flex justify-content-between align-items-start mb-1">
                     <span className={`fw-bold small ${isToday ? "text-warning" : ""}`}>{day}</span>
                     <button
