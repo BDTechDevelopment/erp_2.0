@@ -1,6 +1,9 @@
 "use client";
 
+import { useConfig } from "../hooks/useConfig";
+
 export default function PageLayout({ title, subtitle, actions, children }) {
+  useConfig();
   return (
     <div className="min-vh-100 bg-white">
 
@@ -24,6 +27,13 @@ export default function PageLayout({ title, subtitle, actions, children }) {
       <div className="container-fluid py-4 px-4">
         {children}
       </div>
+
+      {/* ── Rodapé ── */}
+      <footer className="border-top text-center py-3 mt-4">
+        <small className="text-muted" style={{ fontSize: 11, letterSpacing: 0.5 }}>
+          Powered by <span className="fw-semibold">BD Tech Development</span>
+        </small>
+      </footer>
 
     </div>
   );

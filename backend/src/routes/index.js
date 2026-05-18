@@ -6,6 +6,7 @@ const { createItem, listItems, updateItem, deleteItem } = require("../controller
 const { listPersons, createPerson, updatePerson, deletePerson } = require("../controllers/personController");
 const { createActivity, getActivities, updateActivityStatus, deleteActivity } = require("../controllers/activityController");
 const { getActivityReport, exportExcel, exportPDF } = require("../controllers/reportController");
+const { getConfig, updateConfig } = require("../controllers/configController");
 const { auth } = require("../middlewares/auth");
 
 const router = express.Router();
@@ -36,5 +37,8 @@ router.delete("/activities/:id", auth, deleteActivity);
 router.get("/report/activities", auth, getActivityReport);
 router.get("/export/excel", auth, exportExcel);
 router.get("/export/pdf", auth, exportPDF);
+
+router.get("/config", getConfig);
+router.put("/config", auth, updateConfig);
 
 module.exports = router;

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import { useConfig } from "../../hooks/useConfig";
 
 const MODULES = [
   { href: "/calendar", label: "Agenda",          desc: "Visualize e gerencie os agendamentos do mês",   icon: "bi-calendar3",        color: "primary"   },
@@ -9,9 +10,11 @@ const MODULES = [
   { href: "/items",    label: "Itens / Serviços", desc: "Gerencie os serviços e produtos oferecidos",    icon: "bi-box-seam-fill",    color: "secondary" },
   { href: "/report",   label: "Relatórios",       desc: "Gere relatórios de agendamentos por período",   icon: "bi-bar-chart-fill",   color: "warning"   },
   { href: "/users",    label: "Usuários",         desc: "Controle os usuários com acesso ao sistema",    icon: "bi-shield-lock-fill", color: "danger"    },
+  { href: "/settings", label: "Configurações",    desc: "Nome, logo e cores do sistema",                 icon: "bi-gear-fill",        color: "secondary" },
 ];
 
 export default function Dashboard() {
+  const config = useConfig();
   const [activities, setActivities] = useState([]);
   const [persons, setPersons] = useState([]);
   const [userName, setUserName] = useState("");
@@ -54,10 +57,19 @@ export default function Dashboard() {
       {/* ── Barra de navegação superior ── */}
       <nav className="navbar bg-white border-bottom shadow-sm px-4 py-2">
         <div className="container-fluid px-0">
-          <div>
-            <span className="fw-bold fs-5 text-primary">ERP System</span>
-            <br />
-            <small className="text-muted text-capitalize">{monthYear}</small>
+          <div className="d-flex align-items-center gap-2">
+            {config.logoUrl ? (
+              <img
+                src={config.logoUrl}
+                alt="Logo"
+                style={{ height: 36, width: 36, objectFit: "contain", borderRadius: 6 }}
+              />
+            ) : null}
+            <div>
+              <span className="fw-bold fs-5 text-primary">{config.companyName}</span>
+              <br />
+              <small className="text-muted text-capitalize">{monthYear}</small>
+            </div>
           </div>
           <div className="d-flex align-items-center gap-3">
             {userName && (
@@ -131,6 +143,14 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      {/* ── Rodapé ── */}
+      <footer className="border-top text-center py-3 mt-2">
+        <small className="text-muted" style={{ fontSize: 11, letterSpacing: 0.5 }}>
+          Powered by <span className="fw-semibold">BD Tech Development</span>
+        </small>
+      </footer>
+
     </div>
   );
 }
